@@ -18,7 +18,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Entity
 @Table(name = "proyek")
-public class proyek {
+public class Project {
     @Id
     private Integer id;
 

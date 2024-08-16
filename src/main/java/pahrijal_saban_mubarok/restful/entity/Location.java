@@ -15,7 +15,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Entity
 @Table(name = "lokasi")
-public class Lokasi {
+public class Location {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

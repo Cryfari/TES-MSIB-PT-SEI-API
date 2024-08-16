@@ -17,7 +17,7 @@ public class LocationController {
     private LocationService locationService;
 
     @PostMapping(
-            path = "/api/location",
+            path = "/lokasi",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )

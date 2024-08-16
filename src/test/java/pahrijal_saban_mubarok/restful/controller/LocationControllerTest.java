@@ -48,7 +48,7 @@ class LocationControllerTest {
         request.setProvinsi("Jawa Barat");
 
         mockMvc.perform(
-                post("/api/location")
+                post("/lokasi")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
@@ -80,7 +80,7 @@ class LocationControllerTest {
         request.setProvinsi("Jawa Barat");
 
         mockMvc.perform(
-                post("/api/location")
+                post("/lokasi")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
@@ -105,7 +105,7 @@ class LocationControllerTest {
         request.setProvinsi("");
 
         mockMvc.perform(
-                post("/api/location")
+                post("/lokasi")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))

@@ -1,15 +1,13 @@
 package pahrijal_saban_mubarok.restful.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 
 @Getter
@@ -20,6 +18,7 @@ import java.sql.Timestamp;
 @Table(name = "proyek")
 public class Project {
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "nama_proyek")
@@ -28,10 +27,10 @@ public class Project {
     private String client;
 
     @Column(name = "tgl_mulai")
-    private String tanggalMulai;
+    private LocalDateTime tanggalMulai;
 
     @Column(name = "tgl_selesai")
-    private String tanggalSelesai;
+    private LocalDateTime tanggalSelesai;
 
     @Column(name = "pimpinan_proyek")
     private String pimpinanProyek;

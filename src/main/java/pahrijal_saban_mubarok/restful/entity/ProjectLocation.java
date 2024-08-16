@@ -1,9 +1,6 @@
 package pahrijal_saban_mubarok.restful.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,4 +19,13 @@ public class ProjectLocation {
 
     @Column(name = "lokasi_id")
     private Integer lokasiId;
+
+    @ManyToOne
+    @JoinColumn(name = "proyek_id", referencedColumnName = "id", insertable=false, updatable=false)
+    private Project project;
+
+    @ManyToOne
+    @JoinColumn(name = "lokasi_id", referencedColumnName = "id", insertable=false, updatable=false)
+    private Location location;
+
 }

@@ -261,4 +261,46 @@ class LocationControllerTest {
         );
     }
 
+    @Test
+    void testDeleteLocationSuccess() throws Exception {
+        Location location = new Location();
+        location.setNamaLokasi("test");
+        location.setNegara("Indonesia");
+        location.setKota("Bandung");
+        location.setProvinsi("Jawa Barat");
+        locationRepository.save(location);
+        Location lokasi = locationRepository.findByNamaLokasi("test");
+
+        mockMvc.perform(
+                delete("/lokasi/" + lokasi.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpectAll(
+                status().isOk()
+        ).andDo(
+                result -> {
+                    WebResponse<LocationResponse> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<LocationResponse>>() {
+                    });
+                    assertEquals("success", response.getStatus());
+                    assertEquals("lokasi berhasil dihapus", response.getMessage());
+                }
+        );
+    }
+    @Test
+    void testDeleteLocationNotFound() throws Exception {
+        mockMvc.perform(
+                delete("/lokasi/1")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpectAll(
+                status().isNotFound()
+        ).andDo(
+                result -> {
+                    WebResponse<LocationResponse> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<LocationResponse>>() {
+                    });
+                    assertEquals("fail", response.getStatus());
+                    assertEquals("lokasi tidak ditemukan", response.getMessage());
+                }
+        );
+    }
 }

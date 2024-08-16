@@ -94,4 +94,10 @@ public class LocationService {
                 .build();
     }
 
+    public void deleteLocation(Integer id){
+        Location location = locationRepository.findById(String.valueOf(id))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "lokasi tidak ditemukan"));
+
+        locationRepository.delete(location);
+    }
 }

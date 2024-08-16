@@ -71,4 +71,15 @@ public class LocationController {
                 .build();
     }
 
+    @DeleteMapping(
+            path = "/lokasi/{lokasiId}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public WebResponse deleteLocationController(@PathVariable("lokasiId") Integer id){
+        locationService.deleteLocation(id);
+        return WebResponse.<String>builder()
+                .status("success")
+                .message("lokasi berhasil dihapus")
+                .build();
+    }
 }

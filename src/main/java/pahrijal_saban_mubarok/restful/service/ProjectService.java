@@ -60,4 +60,11 @@ public class ProjectService {
 
         return projectLocationRepository.findAll();
     }
+    @Transactional(readOnly = true)
+    public ProjectLocation getAProject(Integer id){
+        ProjectLocation proyek = projectLocationRepository.findById(String.valueOf(id))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "proyek tidak ditemukan"));
+        return proyek;
+    }
+
 }

@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import pahrijal_saban_mubarok.restful.entity.ProjectLocation;
 import pahrijal_saban_mubarok.restful.model.AddProjectRequest;
+import pahrijal_saban_mubarok.restful.model.GetALocationResponse;
 import pahrijal_saban_mubarok.restful.model.WebResponse;
 import pahrijal_saban_mubarok.restful.service.ProjectService;
 
@@ -36,6 +38,18 @@ public class ProjectController {
     public WebResponse getAllLocationController(){
         List data = projectService.getAllProject();
         return WebResponse.<List>builder()
+                .status("success")
+                .data(data)
+                .build();
+    }
+
+    @GetMapping(
+            path = "/proyek/{proyekId}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public WebResponse getAProjectController(@PathVariable("proyekId") Integer id){
+        ProjectLocation data = projectService.getAProject(id);
+        return WebResponse.<ProjectLocation>builder()
                 .status("success")
                 .data(data)
                 .build();

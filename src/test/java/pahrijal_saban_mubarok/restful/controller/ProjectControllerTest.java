@@ -70,7 +70,7 @@ class ProjectControllerTest {
 
 
         AddProjectRequest request = new AddProjectRequest();
-        request.setNamaProyek("test");
+        request.setNamaProyek("test2");
         request.setClient("test");
         request.setTanggalMulai(LocalDateTime.now());
         request.setTanggalSelesai(LocalDateTime.now());
@@ -128,16 +128,6 @@ class ProjectControllerTest {
     void testAddProjectAlreadyRegistered() throws Exception {
         Location lokasi = locationRepository.findByNamaLokasi("test");
 
-
-        Project project = new Project();
-        project.setNamaProyek("test");
-        project.setClient("test");
-        project.setTanggalMulai(LocalDateTime.now());
-        project.setTanggalSelesai(LocalDateTime.now());
-        project.setPimpinanProyek("test");
-        project.setKeterangan("test");
-        projectRepository.save(project);
-
         AddProjectRequest request = new AddProjectRequest();
         request.setNamaProyek("test");
         request.setClient("test");
@@ -188,6 +178,51 @@ class ProjectControllerTest {
 
                     assertEquals("success", response.getStatus());
                     assertEquals(1, response.getData().size());
+                }
+        );
+    }
+
+    @Test
+    void testGetAProjectSuccess() throws Exception {
+        Location lokasi = locationRepository.findByNamaLokasi("test");
+        Project proyek = projectRepository.findByNamaProyek("test");
+
+        ProjectLocation projectLocation = new ProjectLocation();
+        projectLocation.setProyekId(proyek.getId());
+        projectLocation.setLokasiId(lokasi.getId());
+        projectLocationRepository.save(projectLocation);
+
+        mockMvc.perform(
+                get("/proyek/" + proyek.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpectAll(
+                status().isOk()
+        ).andDo(
+                result -> {
+                    WebResponse<ProjectLocation> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<ProjectLocation>>() {
+                    });
+                    assertEquals("success", response.getStatus());
+                    assertEquals(proyek.getId(), response.getData().getProyek().getId());
+                    assertEquals(lokasi.getId(), response.getData().getLokasi().getId());
+                }
+        );
+    }
+
+    @Test
+    void testGetALocationNotFound() throws Exception {
+        mockMvc.perform(
+                get("/proyek/0")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpectAll(
+                status().isNotFound()
+        ).andDo(
+                result -> {
+                    WebResponse<GetALocationResponse> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<GetALocationResponse>>() {
+                    });
+                    assertEquals("fail", response.getStatus());
+                    assertEquals("proyek tidak ditemukan", response.getMessage());
                 }
         );
     }

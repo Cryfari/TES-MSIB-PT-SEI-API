@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import pahrijal_saban_mubarok.restful.entity.Location;
 import pahrijal_saban_mubarok.restful.entity.Project;
+import pahrijal_saban_mubarok.restful.entity.ProjectLocation;
 import pahrijal_saban_mubarok.restful.model.*;
 import pahrijal_saban_mubarok.restful.repository.LocationRepository;
 import pahrijal_saban_mubarok.restful.repository.ProjectLocationRepository;
@@ -41,7 +42,6 @@ class ProjectControllerTest {
     private ObjectMapper objectMapper;
 
     @BeforeEach
-    @AfterEach
     void setUp() {
         locationRepository.deleteAll();
         projectRepository.deleteAll();
@@ -53,6 +53,15 @@ class ProjectControllerTest {
         location.setKota("Bandung");
         location.setProvinsi("Jawa Barat");
         locationRepository.save(location);
+
+        Project project = new Project();
+        project.setNamaProyek("test");
+        project.setClient("test");
+        project.setTanggalMulai(LocalDateTime.now());
+        project.setTanggalSelesai(LocalDateTime.now());
+        project.setPimpinanProyek("test");
+        project.setKeterangan("test");
+        projectRepository.save(project);
     }
 
     @Test
@@ -88,7 +97,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void testAddLocationBadRequest() throws Exception {
+    void testAddProjectBadRequest() throws Exception {
         AddProjectRequest request = new AddProjectRequest();
         request.setNamaProyek("");
         request.setClient("");
@@ -116,7 +125,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void testAddLocationAlreadyRegistered() throws Exception {
+    void testAddProjectAlreadyRegistered() throws Exception {
         Location lokasi = locationRepository.findByNamaLokasi("test");
 
 
@@ -152,6 +161,33 @@ class ProjectControllerTest {
 
                     assertEquals("fail", response.getStatus());
                     assertNotNull(response.getMessage());
+                }
+        );
+    }
+
+    @Test
+    void testGetAllProjectSuccess() throws Exception {
+        Location lokasi = locationRepository.findByNamaLokasi("test");
+        Project proyek = projectRepository.findByNamaProyek("test");
+
+        ProjectLocation projectLocation = new ProjectLocation();
+        projectLocation.setProyekId(proyek.getId());
+        projectLocation.setLokasiId(lokasi.getId());
+        projectLocationRepository.save(projectLocation);
+
+        mockMvc.perform(
+                get("/proyek")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpectAll(
+                status().isOk()
+        ).andDo(
+                result -> {
+                    WebResponse<List> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<List>>() {
+                    });
+
+                    assertEquals("success", response.getStatus());
+                    assertEquals(1, response.getData().size());
                 }
         );
     }

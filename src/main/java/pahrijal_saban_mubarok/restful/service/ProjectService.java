@@ -14,6 +14,7 @@ import pahrijal_saban_mubarok.restful.model.AddProjectRequest;
 import pahrijal_saban_mubarok.restful.repository.ProjectLocationRepository;
 import pahrijal_saban_mubarok.restful.repository.ProjectRepository;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -52,5 +53,11 @@ public class ProjectService {
         projectLocation.setLokasiId(request.getLokasiId());
 
         projectLocationRepository.save(projectLocation);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProjectLocation> getAllProject(){
+
+        return projectLocationRepository.findAll();
     }
 }

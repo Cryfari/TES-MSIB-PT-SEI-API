@@ -1,0 +1,1 @@
+CREATE DATABASE sei_restful_api;

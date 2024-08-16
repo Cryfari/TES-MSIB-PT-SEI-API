@@ -22,10 +22,10 @@ public class ProjectLocation {
 
     @ManyToOne
     @JoinColumn(name = "proyek_id", referencedColumnName = "id", insertable=false, updatable=false)
-    private Project project;
+    private Project proyek;
 
     @ManyToOne
     @JoinColumn(name = "lokasi_id", referencedColumnName = "id", insertable=false, updatable=false)
-    private Location location;
+    private Location lokasi;
 
 }

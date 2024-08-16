@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import pahrijal_saban_mubarok.restful.entity.Location;
 import pahrijal_saban_mubarok.restful.model.AddLocationRequest;
 import pahrijal_saban_mubarok.restful.model.WebResponse;
 import pahrijal_saban_mubarok.restful.service.LocationService;

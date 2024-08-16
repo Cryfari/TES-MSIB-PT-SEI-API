@@ -4,14 +4,18 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import pahrijal_saban_mubarok.restful.entity.Location;
 import pahrijal_saban_mubarok.restful.model.AddLocationRequest;
+import pahrijal_saban_mubarok.restful.model.GetAllLocationResponse;
 import pahrijal_saban_mubarok.restful.repository.LocationRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -39,5 +43,9 @@ public class LocationService {
         location.setKota(request.getKota());
 
         locationRepository.save(location);
+    }
+
+    public List<Location> getAllLocation(){
+        return locationRepository.findAll();
     }
 }

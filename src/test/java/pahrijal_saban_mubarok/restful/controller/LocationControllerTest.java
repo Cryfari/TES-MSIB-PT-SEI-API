@@ -15,6 +15,8 @@ import pahrijal_saban_mubarok.restful.model.AddLocationRequest;
 import pahrijal_saban_mubarok.restful.model.WebResponse;
 import pahrijal_saban_mubarok.restful.repository.LocationRepository;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -116,6 +118,32 @@ class LocationControllerTest {
 
                     assertEquals("fail", response.getStatus());
                     assertNotNull(response.getMessage());
+                }
+        );
+    }
+
+    @Test
+    void testGetAllLocation() throws Exception{
+        Location location = new Location();
+        location.setNamaLokasi("test");
+        location.setNegara("Indonesia");
+        location.setKota("Bandung");
+        location.setProvinsi("Jawa Barat");
+        locationRepository.save(location);
+
+        mockMvc.perform(
+                get("/lokasi")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpectAll(
+                status().isOk()
+        ).andDo(
+                result -> {
+                    WebResponse<List> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<List>>() {
+                    });
+
+                    assertEquals("success", response.getStatus());
+                    assertEquals(1, response.getData().size());
                 }
         );
     }

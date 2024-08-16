@@ -9,8 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import pahrijal_saban_mubarok.restful.entity.Location;
-import pahrijal_saban_mubarok.restful.model.AddLocationRequest;
-import pahrijal_saban_mubarok.restful.model.GetALocationResponse;
+import pahrijal_saban_mubarok.restful.model.*;
 import pahrijal_saban_mubarok.restful.repository.LocationRepository;
 
 import java.util.List;
@@ -66,4 +65,33 @@ public class LocationService {
                 .provinsi(lokasi.getProvinsi())
                 .build();
     }
+
+    @Transactional
+    public LocationResponse updateLocation(UpdateLocationRequest request){
+        Set<ConstraintViolation<UpdateLocationRequest>> constraintViolations = validator.validate(request);
+        System.err.println("tes");
+        if(constraintViolations.size() != 0){
+            throw new ConstraintViolationException(constraintViolations);
+        }
+        Location location = locationRepository.findById(String.valueOf(request.getId()))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "lokasi tidak ditemukan"));
+
+        location.setNamaLokasi(request.getNamaLokasi());
+        location.setNegara(request.getNegara());
+        location.setKota(request.getKota());
+        location.setProvinsi(request.getProvinsi());
+        locationRepository.save(location);
+
+        return toLocationResponse(location);
+    }
+
+    private LocationResponse toLocationResponse(Location location){
+        return LocationResponse.builder()
+                .kota(location.getKota())
+                .namaLokasi(location.getNamaLokasi())
+                .negara(location.getNegara())
+                .provinsi(location.getProvinsi())
+                .build();
+    }
+
 }

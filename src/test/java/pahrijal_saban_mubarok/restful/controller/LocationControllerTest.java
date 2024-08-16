@@ -11,9 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import pahrijal_saban_mubarok.restful.entity.Location;
-import pahrijal_saban_mubarok.restful.model.AddLocationRequest;
-import pahrijal_saban_mubarok.restful.model.GetALocationResponse;
-import pahrijal_saban_mubarok.restful.model.WebResponse;
+import pahrijal_saban_mubarok.restful.model.*;
 import pahrijal_saban_mubarok.restful.repository.LocationRepository;
 
 import java.util.List;
@@ -41,7 +39,7 @@ class LocationControllerTest {
     }
 
     @Test
-    void testAddLocationSuccess() throws Exception{
+    void testAddLocationSuccess() throws Exception {
         AddLocationRequest request = new AddLocationRequest();
         request.setNamaLokasi("test");
         request.setNegara("Indonesia");
@@ -65,8 +63,9 @@ class LocationControllerTest {
                 }
         );
     }
+
     @Test
-    void testAddLocationAlreadyRegistered() throws Exception{
+    void testAddLocationAlreadyRegistered() throws Exception {
         Location location = new Location();
         location.setNamaLokasi("test");
         location.setNegara("Indonesia");
@@ -97,8 +96,9 @@ class LocationControllerTest {
                 }
         );
     }
+
     @Test
-    void testAddLocationBadRequest() throws Exception{
+    void testAddLocationBadRequest() throws Exception {
         AddLocationRequest request = new AddLocationRequest();
         request.setNamaLokasi("");
         request.setNegara("");
@@ -124,7 +124,7 @@ class LocationControllerTest {
     }
 
     @Test
-    void testGetAllLocation() throws Exception{
+    void testGetAllLocation() throws Exception {
         Location location = new Location();
         location.setNamaLokasi("test");
         location.setNegara("Indonesia");
@@ -150,7 +150,7 @@ class LocationControllerTest {
     }
 
     @Test
-    void testGetALocationSuccess() throws Exception{
+    void testGetALocationSuccess() throws Exception {
         Location location = new Location();
         location.setNamaLokasi("test");
         location.setNegara("Indonesia");
@@ -167,7 +167,7 @@ class LocationControllerTest {
         expectedData.setProvinsi("Jawa Barat");
 
         mockMvc.perform(
-                get("/lokasi/"+lokasi.getId())
+                get("/lokasi/" + lokasi.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(
@@ -181,8 +181,9 @@ class LocationControllerTest {
                 }
         );
     }
+
     @Test
-    void testGetALocationNotFound() throws Exception{
+    void testGetALocationNotFound() throws Exception {
         mockMvc.perform(
                 get("/lokasi/1")
                         .accept(MediaType.APPLICATION_JSON)
@@ -198,4 +199,66 @@ class LocationControllerTest {
                 }
         );
     }
+
+    @Test
+    void testUpdateLocationSuccess() throws Exception {
+        Location location = new Location();
+        location.setNamaLokasi("test");
+        location.setNegara("Indonesia");
+        location.setKota("Bandung");
+        location.setProvinsi("Jawa Barat");
+        locationRepository.save(location);
+        Location lokasi = locationRepository.findByNamaLokasi("test");
+
+        UpdateLocationRequest request = new UpdateLocationRequest();
+        request.setId(lokasi.getId());
+        request.setKota("cimahi");
+        request.setNamaLokasi("test di ubah");
+        request.setNegara("jerman");
+        request.setProvinsi("jawa timur");
+
+        mockMvc.perform(
+                put("/lokasi/" + lokasi.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+        ).andExpectAll(
+                status().isOk()
+        ).andDo(
+                result -> {
+                    WebResponse<LocationResponse> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<LocationResponse>>() {
+                    });
+                    assertEquals("success", response.getStatus());
+                    assertEquals(request.getNamaLokasi(), response.getData().getNamaLokasi());
+                    assertEquals(request.getKota(), response.getData().getKota());
+                    assertEquals(request.getProvinsi(), response.getData().getProvinsi());
+                    assertEquals(request.getNegara(), response.getData().getNegara());
+                }
+        );
+    }
+
+    @Test
+    void testUpdateLocationBadRequest() throws Exception {
+        UpdateLocationRequest request = new UpdateLocationRequest();
+        request.setKota("");
+        request.setNamaLokasi("");
+        request.setNegara("");
+
+        mockMvc.perform(
+                put("/lokasi/12345")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+        ).andExpectAll(
+                status().isBadRequest()
+        ).andDo(
+                result -> {
+                    WebResponse<String> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<String>>() {
+                    });
+                    assertEquals("fail", response.getStatus());
+                    assertNotNull(response.getMessage());
+                }
+        );
+    }
+
 }

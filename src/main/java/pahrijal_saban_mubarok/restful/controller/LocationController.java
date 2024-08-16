@@ -1,12 +1,11 @@
 package pahrijal_saban_mubarok.restful.controller;
 
+import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import pahrijal_saban_mubarok.restful.model.AddLocationRequest;
-import pahrijal_saban_mubarok.restful.model.GetALocationResponse;
-import pahrijal_saban_mubarok.restful.model.WebResponse;
+import pahrijal_saban_mubarok.restful.model.*;
 import pahrijal_saban_mubarok.restful.service.LocationService;
 
 import java.util.List;
@@ -53,4 +52,23 @@ public class LocationController {
                 .data(getALocationResponse)
                 .build();
     }
+
+    @PutMapping(
+            path = "/lokasi/{lokasiId}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public WebResponse putAlocationController(
+            @PathVariable("lokasiId") Integer id,
+            @RequestBody UpdateLocationRequest request
+    ){
+        System.err.println("tes");
+        request.setId(id);
+        LocationResponse locationResponse = locationService.updateLocation(request);
+        return WebResponse.<LocationResponse>builder()
+                .status("success")
+                .data(locationResponse)
+                .build();
+    }
+
 }

@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import pahrijal_saban_mubarok.restful.entity.Location;
 import pahrijal_saban_mubarok.restful.model.AddLocationRequest;
+import pahrijal_saban_mubarok.restful.model.GetALocationResponse;
 import pahrijal_saban_mubarok.restful.model.WebResponse;
 import pahrijal_saban_mubarok.restful.repository.LocationRepository;
 
@@ -144,6 +145,56 @@ class LocationControllerTest {
 
                     assertEquals("success", response.getStatus());
                     assertEquals(1, response.getData().size());
+                }
+        );
+    }
+
+    @Test
+    void testGetALocationSuccess() throws Exception{
+        Location location = new Location();
+        location.setNamaLokasi("test");
+        location.setNegara("Indonesia");
+        location.setKota("Bandung");
+        location.setProvinsi("Jawa Barat");
+        locationRepository.save(location);
+        Location lokasi = locationRepository.findByNamaLokasi("test");
+
+        GetALocationResponse expectedData = new GetALocationResponse();
+        expectedData.setId(lokasi.getId());
+        expectedData.setKota("Bandung");
+        expectedData.setNamaLokasi("test");
+        expectedData.setNegara("Indonesia");
+        expectedData.setProvinsi("Jawa Barat");
+
+        mockMvc.perform(
+                get("/lokasi/"+lokasi.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpectAll(
+                status().isOk()
+        ).andDo(
+                result -> {
+                    WebResponse<GetALocationResponse> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<GetALocationResponse>>() {
+                    });
+                    assertEquals("success", response.getStatus());
+                    assertEquals(expectedData, response.getData());
+                }
+        );
+    }
+    @Test
+    void testGetALocationNotFound() throws Exception{
+        mockMvc.perform(
+                get("/lokasi/1")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpectAll(
+                status().isNotFound()
+        ).andDo(
+                result -> {
+                    WebResponse<GetALocationResponse> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<GetALocationResponse>>() {
+                    });
+                    assertEquals("fail", response.getStatus());
+                    assertEquals("lokasi tidak ditemukan", response.getMessage());
                 }
         );
     }

@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import pahrijal_saban_mubarok.restful.model.AddLocationRequest;
+import pahrijal_saban_mubarok.restful.model.GetALocationResponse;
 import pahrijal_saban_mubarok.restful.model.WebResponse;
 import pahrijal_saban_mubarok.restful.service.LocationService;
 
@@ -38,6 +39,18 @@ public class LocationController {
         return WebResponse.<List>builder()
                 .status("success")
                 .data(data)
+                .build();
+    }
+
+    @GetMapping(
+            path = "/lokasi/{lokasiId}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public WebResponse getALocationController(@PathVariable("lokasiId") Integer id){
+        GetALocationResponse getALocationResponse = locationService.getALocation(id);
+        return WebResponse.<GetALocationResponse>builder()
+                .status("success")
+                .data(getALocationResponse)
                 .build();
     }
 }

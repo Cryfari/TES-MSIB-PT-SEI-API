@@ -10,9 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import pahrijal_saban_mubarok.restful.entity.Location;
 import pahrijal_saban_mubarok.restful.model.AddLocationRequest;
+import pahrijal_saban_mubarok.restful.model.GetALocationResponse;
 import pahrijal_saban_mubarok.restful.repository.LocationRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -42,7 +44,26 @@ public class LocationService {
         locationRepository.save(location);
     }
 
+    @Transactional(readOnly = true)
     public List<Location> getAllLocation(){
         return locationRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public GetALocationResponse getALocation(Integer id) {
+        Location lokasi = locationRepository.findById(String.valueOf(id))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "lokasi tidak ditemukan"));
+
+        return toGetLocationResponse(lokasi);
+    }
+
+    private GetALocationResponse toGetLocationResponse(Location lokasi){
+        return GetALocationResponse.builder()
+                .id(lokasi.getId())
+                .namaLokasi(lokasi.getNamaLokasi())
+                .negara(lokasi.getNegara())
+                .kota(lokasi.getKota())
+                .provinsi(lokasi.getProvinsi())
+                .build();
     }
 }

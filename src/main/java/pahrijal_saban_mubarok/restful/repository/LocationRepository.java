@@ -7,4 +7,5 @@ import pahrijal_saban_mubarok.restful.entity.Location;
 @Repository
 public interface LocationRepository extends JpaRepository<Location, String> {
     Boolean existsByNamaLokasi(String namaLokasi);
+    Location findByNamaLokasi(String namaLokasi);
 }

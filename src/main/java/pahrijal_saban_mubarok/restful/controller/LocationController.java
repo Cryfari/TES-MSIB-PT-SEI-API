@@ -24,7 +24,7 @@ public class LocationController {
         locationService.addLocation(request);
         return WebResponse.<String>builder()
                 .status("success")
-                .message("Lokasi Berhasil Ditambahkan")
+                .message("lokasi berhasil ditambahkan")
                 .build();
     }
 

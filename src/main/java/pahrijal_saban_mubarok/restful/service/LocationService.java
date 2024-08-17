@@ -13,7 +13,6 @@ import pahrijal_saban_mubarok.restful.model.*;
 import pahrijal_saban_mubarok.restful.repository.LocationRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Service

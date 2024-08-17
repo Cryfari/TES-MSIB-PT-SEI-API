@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 
@@ -27,10 +28,10 @@ public class Project {
     private String client;
 
     @Column(name = "tgl_mulai")
-    private LocalDateTime tanggalMulai;
+    private Instant tanggalMulai;
 
     @Column(name = "tgl_selesai")
-    private LocalDateTime tanggalSelesai;
+    private Instant tanggalSelesai;
 
     @Column(name = "pimpinan_proyek")
     private String pimpinanProyek;

@@ -59,7 +59,7 @@ class LocationControllerTest {
                     });
 
                     assertEquals("success", response.getStatus());
-                    assertEquals("Lokasi Berhasil Ditambahkan", response.getMessage());
+                    assertEquals("lokasi berhasil ditambahkan", response.getMessage());
                 }
         );
     }

@@ -17,7 +17,7 @@ import pahrijal_saban_mubarok.restful.repository.LocationRepository;
 import pahrijal_saban_mubarok.restful.repository.ProjectLocationRepository;
 import pahrijal_saban_mubarok.restful.repository.ProjectRepository;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -56,8 +56,8 @@ class ProjectControllerTest {
         Project project = new Project();
         project.setNamaProyek("test");
         project.setClient("test");
-        project.setTanggalMulai(LocalDateTime.now());
-        project.setTanggalSelesai(LocalDateTime.now());
+        project.setTanggalMulai(Instant.now());
+        project.setTanggalSelesai(Instant.now());
         project.setPimpinanProyek("test");
         project.setKeterangan("test");
         projectRepository.save(project);
@@ -78,8 +78,8 @@ class ProjectControllerTest {
         AddProjectRequest request = new AddProjectRequest();
         request.setNamaProyek("test2");
         request.setClient("test");
-        request.setTanggalMulai(LocalDateTime.now());
-        request.setTanggalSelesai(LocalDateTime.now());
+        request.setTanggalMulai(Instant.now());
+        request.setTanggalSelesai(Instant.now());
         request.setPimpinanProyek("test");
         request.setKeterangan("test");
         request.setLokasiId(lokasi.getId());
@@ -107,8 +107,8 @@ class ProjectControllerTest {
         AddProjectRequest request = new AddProjectRequest();
         request.setNamaProyek("");
         request.setClient("");
-        request.setTanggalMulai(LocalDateTime.now());
-        request.setTanggalSelesai(LocalDateTime.now());
+        request.setTanggalMulai(Instant.now());
+        request.setTanggalSelesai(Instant.now());
         request.setPimpinanProyek("");
         request.setKeterangan("");
 
@@ -137,8 +137,8 @@ class ProjectControllerTest {
         AddProjectRequest request = new AddProjectRequest();
         request.setNamaProyek("test");
         request.setClient("test");
-        request.setTanggalMulai(LocalDateTime.now());
-        request.setTanggalSelesai(LocalDateTime.now());
+        request.setTanggalMulai(Instant.now());
+        request.setTanggalSelesai(Instant.now());
         request.setPimpinanProyek("test");
         request.setKeterangan("test");
         request.setLokasiId(lokasi.getId());
@@ -249,8 +249,8 @@ class ProjectControllerTest {
         request.setId(proyek.getId());
         request.setNamaProyek("test di ubah");
         request.setClient("test");
-        request.setTanggalMulai(LocalDateTime.now());
-        request.setTanggalSelesai(LocalDateTime.now());
+        request.setTanggalMulai(Instant.now());
+        request.setTanggalSelesai(Instant.now());
         request.setPimpinanProyek("test");
         request.setKeterangan("test");
         request.setLokasiId(lokasi.getId());
@@ -283,8 +283,8 @@ class ProjectControllerTest {
         request.setId(123);
         request.setNamaProyek("");
         request.setClient("");
-        request.setTanggalMulai(LocalDateTime.now());
-        request.setTanggalSelesai(LocalDateTime.now());
+        request.setTanggalMulai(Instant.now());
+        request.setTanggalSelesai(Instant.now());
         request.setPimpinanProyek("test");
         request.setKeterangan("test");
         request.setLokasiId(123);

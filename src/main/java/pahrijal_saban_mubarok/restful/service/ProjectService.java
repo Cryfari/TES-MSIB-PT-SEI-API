@@ -8,9 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import pahrijal_saban_mubarok.restful.entity.Location;
 import pahrijal_saban_mubarok.restful.entity.Project;
 import pahrijal_saban_mubarok.restful.entity.ProjectLocation;
 import pahrijal_saban_mubarok.restful.model.AddProjectRequest;
+import pahrijal_saban_mubarok.restful.model.LocationResponse;
+import pahrijal_saban_mubarok.restful.model.UpdateLocationRequest;
+import pahrijal_saban_mubarok.restful.model.UpdateProjectRequest;
 import pahrijal_saban_mubarok.restful.repository.ProjectLocationRepository;
 import pahrijal_saban_mubarok.restful.repository.ProjectRepository;
 
@@ -66,5 +70,28 @@ public class ProjectService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "proyek tidak ditemukan"));
         return proyek;
     }
+    @Transactional
+    public ProjectLocation updateProject(UpdateProjectRequest request){
+        Set<ConstraintViolation<UpdateProjectRequest>> constraintViolations = validator.validate(request);
+        if(constraintViolations.size() != 0){
+            throw new ConstraintViolationException(constraintViolations);
+        }
 
+
+        System.err.println("test service : "+ request.getId());
+        ProjectLocation proyek = projectLocationRepository.findById(String.valueOf(request.getId()))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "proyek tidak ditemukan"));
+
+        proyek.getProyek().setNamaProyek(request.getNamaProyek());
+        proyek.getProyek().setClient(request.getClient());
+        proyek.getProyek().setTanggalMulai(request.getTanggalMulai());
+        proyek.getProyek().setTanggalSelesai(request.getTanggalSelesai());
+        proyek.getProyek().setPimpinanProyek(request.getPimpinanProyek());
+        proyek.getProyek().setKeterangan(request.getKeterangan());
+
+        proyek.setLokasiId(request.getLokasiId());
+        projectLocationRepository.save(proyek);
+        return projectLocationRepository.findById(String.valueOf(request.getId()))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "proyek tidak ditemukan"));
+    }
 }

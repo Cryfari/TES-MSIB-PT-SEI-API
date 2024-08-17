@@ -62,6 +62,13 @@ class ProjectControllerTest {
         project.setPimpinanProyek("test");
         project.setKeterangan("test");
         projectRepository.save(project);
+
+        Location lokasi = locationRepository.findByNamaLokasi("test");
+        Project proyek = projectRepository.findByNamaProyek("test");
+        ProjectLocation projectLocation = new ProjectLocation();
+        projectLocation.setProyekId(proyek.getId());
+        projectLocation.setLokasiId(lokasi.getId());
+        projectLocationRepository.save(projectLocation);
     }
 
     @Test
@@ -223,6 +230,79 @@ class ProjectControllerTest {
                     });
                     assertEquals("fail", response.getStatus());
                     assertEquals("proyek tidak ditemukan", response.getMessage());
+                }
+        );
+    }
+
+    @Test
+    void testUpdateProjectSuccess() throws Exception {
+        Location location = new Location();
+        location.setNamaLokasi("test2");
+        location.setNegara("Indonesia");
+        location.setKota("cimahi");
+        location.setProvinsi("Jawa Barat");
+        locationRepository.save(location);
+
+        Location lokasi = locationRepository.findByNamaLokasi("test2");
+        Project proyek = projectRepository.findByNamaProyek("test");
+
+        UpdateProjectRequest request = new UpdateProjectRequest();
+        request.setId(proyek.getId());
+        request.setNamaProyek("test di ubah");
+        request.setClient("test");
+        request.setTanggalMulai(LocalDateTime.now());
+        request.setTanggalSelesai(LocalDateTime.now());
+        request.setPimpinanProyek("test");
+        request.setKeterangan("test");
+        request.setLokasiId(lokasi.getId());
+
+        mockMvc.perform(
+                put("/proyek/" + proyek.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+        ).andExpectAll(
+                status().isOk()
+        ).andDo(
+                result -> {
+                    WebResponse<ProjectLocation> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<ProjectLocation>>() {
+                    });
+                    assertEquals("success", response.getStatus());
+                    assertEquals(request.getNamaProyek(), response.getData().getProyek().getNamaProyek());
+                    assertEquals(request.getClient(), response.getData().getProyek().getClient());
+                    assertEquals(request.getTanggalMulai(), response.getData().getProyek().getTanggalMulai());
+                    assertEquals(request.getTanggalSelesai(), response.getData().getProyek().getTanggalSelesai());
+                    assertEquals(request.getPimpinanProyek(), response.getData().getProyek().getPimpinanProyek());
+                    assertEquals(request.getKeterangan(), response.getData().getProyek().getKeterangan());
+                    assertEquals(request.getLokasiId(), response.getData().getLokasiId());
+                }
+        );
+    }
+    @Test
+    void testUpdateLocationBadRequest() throws Exception {
+        UpdateProjectRequest request = new UpdateProjectRequest();
+        request.setId(123);
+        request.setNamaProyek("");
+        request.setClient("");
+        request.setTanggalMulai(LocalDateTime.now());
+        request.setTanggalSelesai(LocalDateTime.now());
+        request.setPimpinanProyek("test");
+        request.setKeterangan("test");
+        request.setLokasiId(123);
+
+        mockMvc.perform(
+                put("/lokasi/0")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+        ).andExpectAll(
+                status().isBadRequest()
+        ).andDo(
+                result -> {
+                    WebResponse<String> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<String>>() {
+                    });
+                    assertEquals("fail", response.getStatus());
+                    assertNotNull(response.getMessage());
                 }
         );
     }

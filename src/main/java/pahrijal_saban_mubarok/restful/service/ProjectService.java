@@ -91,4 +91,11 @@ public class ProjectService {
         return projectLocationRepository.findById(String.valueOf(request.getId()))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "proyek tidak ditemukan"));
     }
+
+    public void deleteProject(Integer id){
+        Project proyek = projectRepository.findById(String.valueOf(id))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "proyek tidak ditemukan"));
+
+        projectRepository.delete(proyek);
+    }
 }

@@ -305,4 +305,41 @@ class ProjectControllerTest {
                 }
         );
     }
+
+    @Test
+    void testDeleteProjectSuccess() throws Exception {
+        Project proyek = projectRepository.findByNamaProyek("test");
+
+        mockMvc.perform(
+                delete("/proyek/" + proyek.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpectAll(
+                status().isOk()
+        ).andDo(
+                result -> {
+                    WebResponse<LocationResponse> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<LocationResponse>>() {
+                    });
+                    assertEquals("success", response.getStatus());
+                    assertEquals("proyek berhasil dihapus", response.getMessage());
+                }
+        );
+    }
+    @Test
+    void testDeleteLocationNotFound() throws Exception {
+        mockMvc.perform(
+                delete("/proyek/0")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpectAll(
+                status().isNotFound()
+        ).andDo(
+                result -> {
+                    WebResponse<LocationResponse> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<LocationResponse>>() {
+                    });
+                    assertEquals("fail", response.getStatus());
+                    assertEquals("proyek tidak ditemukan", response.getMessage());
+                }
+        );
+    }
 }

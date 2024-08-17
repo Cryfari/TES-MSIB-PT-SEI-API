@@ -68,4 +68,15 @@ public class ProjectController {
                 .data(response)
                 .build();
     }
+    @DeleteMapping(
+            path = "/proyek/{proyekId}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public WebResponse deleteLocationController(@PathVariable("proyekId") Integer id){
+        projectService.deleteProject(id);
+        return WebResponse.<String>builder()
+                .status("success")
+                .message("proyek berhasil dihapus")
+                .build();
+    }
 }

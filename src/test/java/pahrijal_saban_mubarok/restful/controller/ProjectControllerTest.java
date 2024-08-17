@@ -92,7 +92,7 @@ class ProjectControllerTest {
                 status().isCreated()
         ).andDo(
                 result -> {
-                    WebResponse<String> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<String>>() {
+                    WebResponse<String> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
                     });
 
                     assertEquals("success", response.getStatus());
@@ -120,7 +120,7 @@ class ProjectControllerTest {
                 status().isBadRequest()
         ).andDo(
                 result -> {
-                    WebResponse<String> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<String>>() {
+                    WebResponse<String> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
                     });
 
                     assertEquals("fail", response.getStatus());
@@ -151,7 +151,7 @@ class ProjectControllerTest {
                 status().isBadRequest()
         ).andDo(
                 result -> {
-                    WebResponse<String> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<String>>() {
+                    WebResponse<String> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
                     });
 
                     assertEquals("fail", response.getStatus());
@@ -178,7 +178,7 @@ class ProjectControllerTest {
                 status().isOk()
         ).andDo(
                 result -> {
-                    WebResponse<List> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<List>>() {
+                    WebResponse<List> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
                     });
 
                     assertEquals("success", response.getStatus());
@@ -205,7 +205,7 @@ class ProjectControllerTest {
                 status().isOk()
         ).andDo(
                 result -> {
-                    WebResponse<GetAProjectResponse> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<GetAProjectResponse>>() {
+                    WebResponse<GetAProjectResponse> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
                     });
                     assertEquals("success", response.getStatus());
                     assertEquals(proyek.getId(), response.getData().getId());
@@ -224,7 +224,7 @@ class ProjectControllerTest {
                 status().isNotFound()
         ).andDo(
                 result -> {
-                    WebResponse<GetALocationResponse> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<GetALocationResponse>>() {
+                    WebResponse<GetALocationResponse> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
                     });
                     assertEquals("fail", response.getStatus());
                     assertEquals("proyek tidak ditemukan", response.getMessage());
@@ -263,7 +263,7 @@ class ProjectControllerTest {
                 status().isOk()
         ).andDo(
                 result -> {
-                    WebResponse<ProjectLocation> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<ProjectLocation>>() {
+                    WebResponse<ProjectLocation> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
                     });
                     assertEquals("success", response.getStatus());
                     assertEquals(request.getNamaProyek(), response.getData().getProyek().getNamaProyek());
@@ -297,7 +297,7 @@ class ProjectControllerTest {
                 status().isBadRequest()
         ).andDo(
                 result -> {
-                    WebResponse<String> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<String>>() {
+                    WebResponse<String> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
                     });
                     assertEquals("fail", response.getStatus());
                     assertNotNull(response.getMessage());
@@ -317,7 +317,7 @@ class ProjectControllerTest {
                 status().isOk()
         ).andDo(
                 result -> {
-                    WebResponse<LocationResponse> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<LocationResponse>>() {
+                    WebResponse<LocationResponse> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
                     });
                     assertEquals("success", response.getStatus());
                     assertEquals("proyek berhasil dihapus", response.getMessage());
@@ -334,7 +334,7 @@ class ProjectControllerTest {
                 status().isNotFound()
         ).andDo(
                 result -> {
-                    WebResponse<LocationResponse> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<LocationResponse>>() {
+                    WebResponse<LocationResponse> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
                     });
                     assertEquals("fail", response.getStatus());
                     assertEquals("proyek tidak ditemukan", response.getMessage());

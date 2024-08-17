@@ -11,10 +11,12 @@ import org.springframework.web.server.ResponseStatusException;
 import pahrijal_saban_mubarok.restful.entity.Project;
 import pahrijal_saban_mubarok.restful.entity.ProjectLocation;
 import pahrijal_saban_mubarok.restful.model.AddProjectRequest;
+import pahrijal_saban_mubarok.restful.model.GetAProjectResponse;
 import pahrijal_saban_mubarok.restful.model.UpdateProjectRequest;
 import pahrijal_saban_mubarok.restful.repository.ProjectLocationRepository;
 import pahrijal_saban_mubarok.restful.repository.ProjectRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -57,15 +59,32 @@ public class ProjectService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProjectLocation> getAllProject(){
+    public List<GetAProjectResponse> getAllProject(){
+        List<GetAProjectResponse> proyek = new ArrayList<>();
+        for(ProjectLocation proyekLocation: projectLocationRepository.findAll()){
+            proyek.add(toGetAProjectResponse(proyekLocation));
+        }
+        return proyek;
+    }
 
-        return projectLocationRepository.findAll();
+    private GetAProjectResponse toGetAProjectResponse(ProjectLocation proyek){
+        return GetAProjectResponse.builder()
+                .id(proyek.getProyek().getId())
+                .client(proyek.getProyek().getClient())
+                .namaProyek(proyek.getProyek().getNamaProyek())
+                .tanggalMulai(proyek.getProyek().getTanggalMulai())
+                .tanggalSelesai(proyek.getProyek().getTanggalSelesai())
+                .pimpinanProyek(proyek.getProyek().getPimpinanProyek())
+                .keterangan(proyek.getProyek().getKeterangan())
+                .lokasi(proyek.getLokasi())
+                .createdAt(proyek.getProyek().getCreatedAt())
+                .build();
     }
     @Transactional(readOnly = true)
-    public ProjectLocation getAProject(Integer id){
+    public GetAProjectResponse getAProject(Integer id){
         ProjectLocation proyek = projectLocationRepository.findById(String.valueOf(id))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "proyek tidak ditemukan"));
-        return proyek;
+        return toGetAProjectResponse(proyek);
     }
     @Transactional
     public ProjectLocation updateProject(UpdateProjectRequest request){

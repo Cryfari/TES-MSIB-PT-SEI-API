@@ -83,7 +83,6 @@ class ProjectControllerTest {
         request.setPimpinanProyek("test");
         request.setKeterangan("test");
         request.setLokasiId(lokasi.getId());
-
         mockMvc.perform(
                 post("/proyek")
                         .accept(MediaType.APPLICATION_JSON)
@@ -206,10 +205,10 @@ class ProjectControllerTest {
                 status().isOk()
         ).andDo(
                 result -> {
-                    WebResponse<ProjectLocation> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<ProjectLocation>>() {
+                    WebResponse<GetAProjectResponse> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<WebResponse<GetAProjectResponse>>() {
                     });
                     assertEquals("success", response.getStatus());
-                    assertEquals(proyek.getId(), response.getData().getProyek().getId());
+                    assertEquals(proyek.getId(), response.getData().getId());
                     assertEquals(lokasi.getId(), response.getData().getLokasi().getId());
                 }
         );

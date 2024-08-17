@@ -25,7 +25,7 @@ public class ProjectController {
         projectService.addProject(request);
         return WebResponse.<String>builder()
                 .status("success")
-                .message("proyek Berhasil Ditambahkan")
+                .message("proyek berhasil ditambahkan")
                 .build();
     }
 
@@ -46,8 +46,8 @@ public class ProjectController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public WebResponse getAProjectController(@PathVariable("proyekId") Integer id){
-        ProjectLocation data = projectService.getAProject(id);
-        return WebResponse.<ProjectLocation>builder()
+        GetAProjectResponse data = projectService.getAProject(id);
+        return WebResponse.<GetAProjectResponse>builder()
                 .status("success")
                 .data(data)
                 .build();

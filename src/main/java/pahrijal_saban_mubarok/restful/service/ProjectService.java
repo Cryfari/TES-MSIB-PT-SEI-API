@@ -94,7 +94,7 @@ public class ProjectService {
         }
 
 
-        System.err.println("test service : "+ request.getId());
+
         ProjectLocation proyek = projectLocationRepository.findById(String.valueOf(request.getId()))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "proyek tidak ditemukan"));
 

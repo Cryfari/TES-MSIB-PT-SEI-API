@@ -68,7 +68,6 @@ public class LocationService {
     @Transactional
     public LocationResponse updateLocation(UpdateLocationRequest request){
         Set<ConstraintViolation<UpdateLocationRequest>> constraintViolations = validator.validate(request);
-        System.err.println("tes");
         if(constraintViolations.size() != 0){
             throw new ConstraintViolationException(constraintViolations);
         }

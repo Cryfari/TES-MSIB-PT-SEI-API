@@ -61,7 +61,6 @@ public class LocationController {
             @PathVariable("lokasiId") Integer id,
             @RequestBody UpdateLocationRequest request
     ){
-        System.err.println("tes");
         request.setId(id);
         LocationResponse locationResponse = locationService.updateLocation(request);
         return WebResponse.<LocationResponse>builder()
